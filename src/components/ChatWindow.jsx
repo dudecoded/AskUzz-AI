@@ -1,7 +1,9 @@
-function ChatWindow({ message }) {
+function ChatWindow({ messages }) {
   return (
     <main>
-      <p>{message}</p>
+      {messages.map((message, index) => (
+        <p key={index}>{message}</p>
+      ))}
     </main>
   );
 }

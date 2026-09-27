@@ -4,16 +4,19 @@ import ChatWindow from "./components/ChatWindow";
 import ChatInput from "./components/ChatInput";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   function handleSend() {
-    console.log(message);
-  }
+  if (message.trim() === "") return;
+
+  setMessages([...messages, message]);
+  setMessage("");
+}
 
   return (
     <div>
       <Navbar />
-      <ChatWindow message={message} />
+      <ChatWindow messages={messages} />
       <ChatInput
         message={message}
         setMessage={setMessage}
