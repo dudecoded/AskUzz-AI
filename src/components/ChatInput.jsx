@@ -1,4 +1,4 @@
-function ChatInput({ message, setMessage }) {
+function ChatInput({ message, setMessage, handleSend }) {
   return (
     <div>
       <input
@@ -7,7 +7,7 @@ function ChatInput({ message, setMessage }) {
         onChange={(event) => setMessage(event.target.value)}
       />
 
-      <button>Send</button>
+      <button onClick={handleSend}>Send</button>
     </div>
   );
 }
