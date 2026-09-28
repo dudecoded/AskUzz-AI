@@ -17,7 +17,6 @@ function App() {
       sender: "user",
     };
 
-    // Show user's message immediately
     setMessages((previousMessages) => [
       ...previousMessages,
       userMessage,
@@ -45,10 +44,15 @@ function App() {
         error.response?.data || error.message
       );
 
+      const errorMessage =
+        error.response?.data?.error?.message ||
+        error.message ||
+        "Unknown error";
+
       setMessages((previousMessages) => [
         ...previousMessages,
         {
-          text: "Sorry, something went wrong. Check the console.",
+          text: `API Error: ${errorMessage}`,
           sender: "ai",
         },
       ]);

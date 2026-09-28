@@ -1,33 +1,26 @@
 import axios from "axios";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 export async function getGeminiResponse(message) {
-  console.log("API key loaded:", !!API_KEY);
-
   const response = await axios.post(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+    "https://api.groq.com/openai/v1/chat/completions",
     {
-      contents: [
+      messages: [
         {
           role: "user",
-          parts: [
-            {
-              text: message,
-            },
-          ],
+          content: message,
         },
       ],
+      model: "openai/gpt-oss-20b",
     },
     {
       headers: {
         "Content-Type": "application/json",
-        "x-goog-api-key": API_KEY,
+        Authorization: `Bearer ${API_KEY}`,
       },
     }
   );
 
-  console.log("Gemini response:", response.data);
-
-  return response.data.candidates[0].content.parts[0].text;
+  return response.data.choices[0].message.content;
 }
