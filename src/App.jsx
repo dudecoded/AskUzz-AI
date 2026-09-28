@@ -10,19 +10,25 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSend() {
-    if (message.trim() === "") return;
+    if (message.trim() === "" || loading) return;
 
     const userMessage = {
       text: message,
       sender: "user",
     };
 
-    setMessages([...messages, userMessage]);
+    // Show user's message immediately
+    setMessages((previousMessages) => [
+      ...previousMessages,
+      userMessage,
+    ]);
+
+    const currentMessage = message;
     setMessage("");
     setLoading(true);
 
     try {
-      const aiResponse = await getGeminiResponse(message);
+      const aiResponse = await getGeminiResponse(currentMessage);
 
       const aiMessage = {
         text: aiResponse,
@@ -31,17 +37,18 @@ function App() {
 
       setMessages((previousMessages) => [
         ...previousMessages,
-        userMessage,
         aiMessage,
       ]);
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Gemini error:",
+        error.response?.data || error.message
+      );
 
       setMessages((previousMessages) => [
         ...previousMessages,
-        userMessage,
         {
-          text: "Sorry, something went wrong.",
+          text: "Sorry, something went wrong. Check the console.",
           sender: "ai",
         },
       ]);
@@ -54,7 +61,10 @@ function App() {
     <div>
       <Navbar />
 
-      <ChatWindow messages={messages} loading={loading} />
+      <ChatWindow
+        messages={messages}
+        loading={loading}
+      />
 
       <ChatInput
         message={message}
